@@ -11,7 +11,7 @@ import com.atguigu.core.bean.QueryCondition;
  *
  * @author linyu902
  * @email linyu902@atguigu.com
- * @date 2019-12-02 10:11:41
+ * @date 2019-12-03 13:44:41
  */
 public interface ProductAttrValueService extends IService<ProductAttrValueEntity> {
 
