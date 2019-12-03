@@ -1,7 +1,6 @@
 package com.atguigu.gmall.pms.service.impl;
 
 import org.springframework.stereotype.Service;
-import java.util.Map;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -27,4 +26,22 @@ public class AttrServiceImpl extends ServiceImpl<AttrDao, AttrEntity> implements
         return new PageVo(page);
     }
 
+    @Override
+    public PageVo queryAttr(QueryCondition condition, Long cid, Integer type) {
+
+        QueryWrapper<AttrEntity> wrapper = new QueryWrapper<>();
+
+        if (cid != null) {
+            wrapper.eq("catelog_id",cid);
+        }
+
+        wrapper.eq("attr_type",type);
+
+        IPage<AttrEntity> page = this.page(
+                new Query<AttrEntity>().getPage(condition),
+                wrapper
+        );
+
+        return new PageVo(page);
+    }
 }
