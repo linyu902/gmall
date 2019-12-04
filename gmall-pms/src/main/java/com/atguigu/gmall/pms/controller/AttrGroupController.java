@@ -1,6 +1,7 @@
 package com.atguigu.gmall.pms.controller;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 
@@ -35,6 +36,13 @@ import com.atguigu.gmall.pms.service.AttrGroupService;
 public class AttrGroupController {
     @Autowired
     private AttrGroupService attrGroupService;
+
+    @GetMapping("withattrs/cat/{catId}")
+    public Resp<List<GroupVO>> queryGroupAndAttrByCid(@PathVariable Long catId){
+        List<GroupVO> groupVOS = attrGroupService.queryGroupAndAttrByCid(catId);
+
+        return Resp.ok(groupVOS);
+    }
 
     @GetMapping("withattr/{gid}")
     public Resp<GroupVO> queryAllAttrByGid(@PathVariable("gid")Long gid){

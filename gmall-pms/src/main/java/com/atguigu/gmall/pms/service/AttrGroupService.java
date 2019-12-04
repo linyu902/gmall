@@ -6,6 +6,8 @@ import com.atguigu.gmall.pms.entity.AttrGroupEntity;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 
+import java.util.List;
+
 
 /**
  * 属性分组
@@ -21,5 +23,7 @@ public interface AttrGroupService extends IService<AttrGroupEntity> {
     PageVo queryGroupByCatId(QueryCondition condition, Long cid);
 
     GroupVO queryAllAttrByGid(Long gid);
+
+    List<GroupVO> queryGroupAndAttrByCid(Long catId);
 }
 

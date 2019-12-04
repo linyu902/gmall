@@ -16,5 +16,6 @@ import com.atguigu.core.bean.QueryCondition;
 public interface SpuBoundsService extends IService<SpuBoundsEntity> {
 
     PageVo queryPage(QueryCondition params);
+
 }
 
