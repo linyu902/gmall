@@ -11,6 +11,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import com.atguigu.gmall.sms.entity.SkuBoundsEntity;
@@ -33,6 +34,7 @@ public class SkuBoundsController {
     @Autowired
     private SkuBoundsService skuBoundsService;
 
+    @Transactional
     @PostMapping("skusale/save")
     public Resp<Object> saveSms(@RequestBody SkuSmsVO skuSmsVO){
 
