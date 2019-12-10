@@ -1,5 +1,6 @@
 package com.atguigu.gmall.search.pojo;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
@@ -35,8 +36,8 @@ public class GoodsVO {
     @Field(type = FieldType.Integer)
     private Integer sale;   //销量
 
-    @Field(type = FieldType.Long)
-    private Long store;     //是否有货
+    @Field(type = FieldType.Boolean)
+    private Boolean store;     //是否有货
 
     @Field(type = FieldType.Long)
     private Long brandId;   //品牌Id

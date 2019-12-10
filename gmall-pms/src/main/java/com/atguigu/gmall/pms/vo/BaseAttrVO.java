@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 public class BaseAttrVO extends ProductAttrValueEntity {
 
-    public void setAttrValue(List<String> valueSelected){
+    public void setValueSelected(List<String> valueSelected){
         if (CollectionUtils.isEmpty(valueSelected)){
             return;
         }

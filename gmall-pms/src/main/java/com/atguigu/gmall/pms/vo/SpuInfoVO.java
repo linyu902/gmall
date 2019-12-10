@@ -2,6 +2,7 @@ package com.atguigu.gmall.pms.vo;
 
 import com.atguigu.gmall.pms.entity.SpuInfoEntity;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @modified By:十一。
  */
 @Data
+@ToString
 public class SpuInfoVO extends SpuInfoEntity {
 
     private List<String> spuImages;

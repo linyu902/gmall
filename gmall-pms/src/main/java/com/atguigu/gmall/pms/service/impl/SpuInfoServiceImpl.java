@@ -92,6 +92,7 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         // 1.保存pms_spu_info信息   时间需要设置
         // 1.1保存主要信息
         Long spuId = saveSpuInfo(spuInfoVO);
+//        System.out.println("spuInfoVO = " + spuInfoVO);
         // 1.2保存图片信息
         this.descService.saveSpuInfoDesc(spuInfoVO, spuId);
         // 1.3保存基本属性信息
