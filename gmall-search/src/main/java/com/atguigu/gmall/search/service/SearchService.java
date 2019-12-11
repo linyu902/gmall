@@ -13,6 +13,7 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.Operator;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -22,8 +23,10 @@ import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.aggregations.Aggregation;
 import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.aggregations.Aggregations;
+import org.elasticsearch.search.aggregations.bucket.nested.ParsedNested;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedLongTerms;
 import org.elasticsearch.search.aggregations.bucket.terms.ParsedStringTerms;
+import org.elasticsearch.search.aggregations.bucket.terms.Terms;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.sort.SortOrder;
@@ -122,10 +125,30 @@ public class SearchService {
         SearchHit[] subHits = hits.getHits();
         for (SearchHit subHit : subHits) {
             GoodsVO goodVO = OBJECT_MAPPER.readValue(subHit.getSourceAsString(), new TypeReference<GoodsVO>(){});
+            //高亮结果集
+            goodVO.setTitle(subHit.getHighlightFields().get("title").getFragments()[0].toString());
             goodVOs.add(goodVO);
         }
         responseVO.setProducts(goodVOs);
-        responseVO.setAttrs(null);
+        //属性
+        ParsedNested attrAgg = (ParsedNested) map.get("attrAgg");
+        ParsedLongTerms attrIdAgg = (ParsedLongTerms) attrAgg.getAggregations().asMap().get("attrIdAgg");
+        List<SearchResponseAttrVO> searchResponseAttrVOS = attrIdAgg.getBuckets().stream().map(bucket -> {
+            SearchResponseAttrVO responseAttrVO = new SearchResponseAttrVO();
+            //id
+            responseAttrVO.setProductAttributeId((Long) bucket.getKeyAsNumber());
+            //name
+            ParsedStringTerms attrNameAgg = (ParsedStringTerms) bucket.getAggregations().asMap().get("attrNameAgg");
+            List<? extends Terms.Bucket> attrNameAggBuckets = attrNameAgg.getBuckets();
+            responseAttrVO.setName(attrNameAggBuckets.get(0).getKeyAsString());
+            //属性
+            ParsedStringTerms attrValueAgg = (ParsedStringTerms) bucket.getAggregations().asMap().get("attrValueAgg");
+            List<String> atrValues = attrValueAgg.getBuckets().stream().map(Terms.Bucket::getKeyAsString).collect(Collectors.toList());
+            responseAttrVO.setValue(atrValues);
+            return responseAttrVO;
+        }).collect(Collectors.toList());
+
+        responseVO.setAttrs(searchResponseAttrVOS);
 
         return responseVO;
     }
@@ -228,6 +251,9 @@ public class SearchService {
                     .subAggregation(AggregationBuilders.terms("attrValueAgg").field("attrs.attrValue"))));
 
         System.out.println("sourceBuilder = " + sourceBuilder.toString());
+
+        //结果集过滤
+        sourceBuilder.fetchSource(new String[]{"skuId","pic","price","title"} , null);
 
         SearchRequest searchRequest = new SearchRequest("goods");
         searchRequest.types("info");

@@ -9,8 +9,11 @@ import com.atguigu.gmall.pms.vo.SkuInfoVO;
 import com.atguigu.gmall.pms.vo.SpuInfoVO;
 import com.atguigu.gmall.vo.SkuSmsVO;
 import org.apache.commons.lang3.StringUtils;
+import org.checkerframework.checker.units.qual.A;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -52,6 +55,12 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
 
     @Autowired
     private SmsSkuClient smsSkuClient;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
+
+    @Value("${item.rabbitmq.exchangeName}")
+    private String EXCHANGE_NAME;
 
     @Override
     public PageVo queryPage(QueryCondition params) {
@@ -101,6 +110,12 @@ public class SpuInfoServiceImpl extends ServiceImpl<SpuInfoDao, SpuInfoEntity> i
         // 2.保存pms_sku_info
         //2.1 保存sku信息
         saveSkuAndSale(spuInfoVO, spuId);
+        this.sendMsg("insert",spuId);
+    }
+
+    private void sendMsg(String type , long spuId){
+
+        amqpTemplate.convertAndSend(EXCHANGE_NAME,"item." + type ,spuId);
     }
 
     private void saveSkuAndSale(SpuInfoVO spuInfoVO, Long spuId) {
