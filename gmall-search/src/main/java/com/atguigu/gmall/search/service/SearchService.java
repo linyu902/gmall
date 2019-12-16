@@ -59,8 +59,8 @@ public class SearchService {
 
         SearchRequest searchRequest = this.getDSL(searchParam);
         SearchResponse searchResponse = this.restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
-        System.out.println("------------------------------------------------------------------");
-        System.out.println(searchResponse.toString());
+//        System.out.println("------------------------------------------------------------------");
+//        System.out.println(searchResponse.toString());
         SearchResponseVO responseVO = this.parseSearchResult(searchResponse);
         responseVO.setPageNum(searchParam.getPageNum());
         responseVO.setPageSize(searchParam.getPageSize());
@@ -250,7 +250,7 @@ public class SearchService {
                     .subAggregation(AggregationBuilders.terms("attrNameAgg").field("attrs.attrName"))
                     .subAggregation(AggregationBuilders.terms("attrValueAgg").field("attrs.attrValue"))));
 
-        System.out.println("sourceBuilder = " + sourceBuilder.toString());
+//        System.out.println("sourceBuilder = " + sourceBuilder.toString());
 
         //结果集过滤
         sourceBuilder.fetchSource(new String[]{"skuId","pic","price","title"} , null);

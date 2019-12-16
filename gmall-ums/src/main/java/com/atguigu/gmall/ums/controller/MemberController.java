@@ -7,6 +7,7 @@ import java.util.Map;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,30 @@ import com.atguigu.gmall.ums.service.MemberService;
 public class MemberController {
     @Autowired
     private MemberService memberService;
+
+    @PostMapping("code")
+    public Resp<Object> getCode(@RequestParam("phone") String phone){
+        this.memberService.getCode(phone);
+        return Resp.ok(null);
+    }
+
+    @GetMapping("query")
+    public Resp<MemberEntity> queryByUsernameAndPassword(@RequestParam("username")String username,@RequestParam("password")String password){
+        MemberEntity memberEntity = this.memberService.queryByUsernameAndPassword(username,password);
+        return Resp.ok(memberEntity);
+    }
+
+    @PostMapping("register")
+    public void register(MemberEntity memberEntity,@RequestParam("code")String code){
+        this.memberService.register(memberEntity,code);
+    }
+
+
+    @GetMapping("check/{param}/{type}")
+    public Resp<Boolean> check(@PathVariable("param") String data , @PathVariable("type") Integer type){
+        Boolean bool = memberService.check(data,type);
+        return Resp.ok(bool);
+    }
 
     /**
      * 列表
