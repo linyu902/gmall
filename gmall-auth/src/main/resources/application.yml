@@ -10,5 +10,5 @@ gmall:
     pubKeyPath: D:\\ideaworkspace\\rsa\\rsa.pub # 公钥地址
     priKeyPath: D:\\ideaworkspace\\rsa\\rsa.pri # 私钥地址
     secret: lingyu0314$#linyu
-    expire: 180 # 过期时间,单位分钟
+    expire: 18000000 # 过期时间,单位分钟
     cookieName: GMALL_TOKEN

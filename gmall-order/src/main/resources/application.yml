@@ -1,0 +1,19 @@
+server:
+  port: 8092
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+  rabbitmq:
+    host: 192.168.79.128
+    virtual-host: /linyu902
+    username: linyu902
+    password: linyu902
+    port: 5672
+  redis:
+    host: 192.168.79.128
+gmall:
+  jwt:
+    pubKeyPath: D:\\ideaworkspace\\rsa\\rsa.pub # 公钥地址
+    cookieName: GMALL_TOKEN
