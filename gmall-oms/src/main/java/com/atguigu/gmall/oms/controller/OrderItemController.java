@@ -7,6 +7,7 @@ import java.util.Map;
 import com.atguigu.core.bean.PageVo;
 import com.atguigu.core.bean.QueryCondition;
 import com.atguigu.core.bean.Resp;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,14 @@ import com.atguigu.gmall.oms.service.OrderItemService;
 public class OrderItemController {
     @Autowired
     private OrderItemService orderItemService;
+
+    @GetMapping("{orderToken}")
+    public Resp<OrderItemEntity> querySeckillOrder(@PathVariable("orderToken")String orderToken){
+
+        OrderItemEntity itemEntity = this.orderItemService.getOne(new QueryWrapper<OrderItemEntity>().eq("order_sn", orderToken));
+
+        return Resp.ok(itemEntity);
+    }
 
     /**
      * 列表
