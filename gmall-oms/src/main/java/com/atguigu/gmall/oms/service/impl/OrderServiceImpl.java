@@ -67,7 +67,6 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         // 1. 保存订单信息
         OrderEntity orderEntity = new OrderEntity();
 
-
         Long userId = orderSubmitVO.getUserId();
         Resp<MemberEntity> memberEntityResp = this.umsClient.queryMemberById(userId);
         MemberEntity memberEntity = memberEntityResp.getData();
@@ -93,6 +92,8 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
         orderEntity.setReceiverProvince(addressEntity.getProvince());
         orderEntity.setReceiverRegion(addressEntity.getRegion());
         orderEntity.setDeleteStatus(0);
+        orderEntity.setGrowth(5000);
+        orderEntity.setIntegration(7000);
 
         this.save(orderEntity);
         // 2. 保存订单详情信息

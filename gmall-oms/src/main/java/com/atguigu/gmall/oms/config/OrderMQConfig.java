@@ -40,7 +40,7 @@ public class OrderMQConfig {
         Map<String,Object> map = new HashMap<>();
         map.put("x-dead-letter-exchange", "GMALL-ORDER-EXCHANGE");
         map.put("x-dead-letter-routing-key", "order.dead");
-        map.put("x-message-ttl", 120000); // 仅仅用于测试，实际根据需求，通常30分钟或者15分
+        map.put("x-message-ttl", 1800000); // 仅仅用于测试，实际根据需求，通常30分钟或者15分
         return new Queue("ORDER-TTL-QUEUE",true,false,false,map);
     }
 

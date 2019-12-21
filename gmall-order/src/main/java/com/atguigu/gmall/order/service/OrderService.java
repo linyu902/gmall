@@ -153,7 +153,7 @@ public class OrderService {
     }
 
     @Transactional
-    public Object submit(OrderSubmitVO submitVO) {
+    public OrderEntity submit(OrderSubmitVO submitVO) {
 
         //  1.  验证token，防止重复提交
         String orderToken = submitVO.getOrderToken();
@@ -189,9 +189,10 @@ public class OrderService {
             throw new OrderException((String) resp.getData());
         }
         //  4.  创建订单即订单详情(编写接口)
+        OrderEntity orderEntity = null;
         try {
             Resp<OrderEntity> orderEntityResp = this.omsClient.bigSave(submitVO);
-            OrderEntity orderEntity = orderEntityResp.getData();
+            orderEntity = orderEntityResp.getData();
         } catch (Exception e) {
             e.printStackTrace();
             //  出现异常，发送消息将锁定的库存解锁..
@@ -210,6 +211,6 @@ public class OrderService {
         // 5.2. 发送消息给购物车
         amqpTemplate.convertAndSend("GMALL-PMS-EXCHANGE","cart.delete",map);
 
-        return null;
+        return orderEntity;
     }
 }

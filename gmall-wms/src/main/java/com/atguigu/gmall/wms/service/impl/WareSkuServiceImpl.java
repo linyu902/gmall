@@ -76,7 +76,7 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
         }
         String orderToken = skuLockVOS.get(0).getOrderToken();
         redisTemplate.opsForValue().set(orderToken, JSON.toJSONString(skuLockVOS));
-        this.amqpTemplate.convertAndSend("GMALL.STOCK.UNLOCK","stock.ttl",orderToken);
+        this.amqpTemplate.convertAndSend("GMALL-STOCK-EXCHANGE","stock.ttl",orderToken);
         return null;
     }
 

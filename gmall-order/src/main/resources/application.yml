@@ -17,3 +17,9 @@ gmall:
   jwt:
     pubKeyPath: D:\\ideaworkspace\\rsa\\rsa.pub # 公钥地址
     cookieName: GMALL_TOKEN
+alipay:
+  app_id: 2016101600700941
+  notify_url: http://0mcjep6t8t.52http.net/api/order/pay/success # 域名是哲西云提供的域名，路径是订单支付成功回调的路径
+  return_url: www.linyux3x4.com
+  sign_type: RSA2
+  gatewayUrl: https://openapi.alipaydev.com/gateway.do

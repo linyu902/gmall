@@ -26,5 +26,14 @@
         <result property="createTime" column="create_time"/>
     </resultMap>
 
+    <update id="updateBoundsById">
+        UPDATE
+            ums_member
+        SET
+            growth = #{growth},
+            integration = #{integration}
+        WHERE
+            id = #{userId};
+    </update>
 
 </mapper>
