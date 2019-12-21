@@ -19,4 +19,6 @@ public class SkuLockVO {
     private Boolean status; //锁定状态
 
     private Long wareSkuId;  //仓库id
+
+    private String orderToken;
 }

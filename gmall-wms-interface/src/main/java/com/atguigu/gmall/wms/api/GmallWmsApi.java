@@ -6,6 +6,7 @@ import com.atguigu.gmall.wms.vo.SkuLockVO;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -26,5 +27,5 @@ public interface GmallWmsApi {
     public Resp<List<WareSkuEntity>> queryWareSkuBySkuId(@PathVariable("skuId") Long skuId);
 
     @PostMapping("wms/waresku")
-    public Resp<Object> checkStore(List<SkuLockVO> skuLockVOS);
+    public Resp<Object> checkStore(@RequestBody List<SkuLockVO> skuLockVOS);
 }

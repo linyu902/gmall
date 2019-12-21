@@ -1,9 +1,12 @@
 package com.atguigu.gmall.wms.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.atguigu.gmall.wms.vo.SkuLockVO;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,6 +36,12 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
     private RedissonClient redissonClient;
 
     private static final String LOCK_PREFIX = "store:lock:";
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private AmqpTemplate amqpTemplate;
 
     @Override
     public PageVo queryPage(QueryCondition params) {
@@ -65,6 +74,9 @@ public class WareSkuServiceImpl extends ServiceImpl<WareSkuDao, WareSkuEntity> i
             List<Long> skuIds = unLock.stream().map(skuLockVO -> skuLockVO.getSkuId()).collect(Collectors.toList());
             return "该商品数量不足" + skuIds.toString();
         }
+        String orderToken = skuLockVOS.get(0).getOrderToken();
+        redisTemplate.opsForValue().set(orderToken, JSON.toJSONString(skuLockVOS));
+        this.amqpTemplate.convertAndSend("GMALL.STOCK.UNLOCK","stock.ttl",orderToken);
         return null;
     }
 
